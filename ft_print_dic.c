@@ -6,7 +6,7 @@
 /*   By: tkoami <tkoami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 20:09:51 by tkoami            #+#    #+#             */
-/*   Updated: 2021/01/26 12:20:18 by tkoami           ###   ########.fr       */
+/*   Updated: 2021/01/26 20:52:38 by tkoami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		ft_putpadding(char c, int length)
 	return (res);
 }
 
-int		ft_putnbr(long long nbr)
+int		ft_putnbr(long long nbr, t_lists *info)
 {
 	char	mod;
 	int		res;
@@ -39,19 +39,26 @@ int		ft_putnbr(long long nbr)
 	res = 0;
 	if (nbr < 0)
 		nbr *= -1;
+	if (*(info->specifier) == 'c')
+	{
+		mod = (char)nbr;
+		return (write(1, &mod, 1));
+	}
 	mod = nbr % 10 + '0';
 	nbr /= 10;
 	if (nbr > 0)
-		return (res += ft_putnbr(nbr) + write(1, &mod, 1));
+		return (res += ft_putnbr(nbr, info) + write(1, &mod, 1));
 	else
 		return (res += write(1, &mod, 1));
 }
 
-int		ft_get_length(long long nbr)
+int		ft_get_length(long long nbr, t_lists *info)
 {
 	int length;
 
 	length = 1;
+	if (*(info->specifier) == 'c')
+		return (length);
 	while (nbr /= 10)
 		length++;
 	return (length);
@@ -64,12 +71,12 @@ int		ft_print_di(va_list *ap, t_lists *info)
 	int			res;
 
 	nbr = (long long)va_arg(*ap, int);
-	nbrlen = ft_get_length(nbr);
+	nbrlen = ft_get_length(nbr, info);
 	if (info->precision == 0 && nbr == 0)
 		return (0);
-	if (nbrlen <= info->precision)
+	if (nbrlen < info->precision)
 		res = ft_put_with_zero(nbr, info, nbrlen);
-	if (info->precision < nbrlen && nbrlen < info->width)
+	else
 		res = ft_put_with_spaces(nbr, info, nbrlen);
 	return (res);
 }

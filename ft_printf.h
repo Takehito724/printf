@@ -6,7 +6,7 @@
 /*   By: tkoami <tkoami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 00:43:21 by tkoami            #+#    #+#             */
-/*   Updated: 2021/01/26 12:53:06 by tkoami           ###   ########.fr       */
+/*   Updated: 2021/01/26 21:02:38 by tkoami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 # include <stdarg.h>
 # include <unistd.h>
+# include "libft/libft.h"
 
 # define ZERO 0
 # define MINUS 1
@@ -25,6 +26,7 @@
 # define PRECISION 1
 
 # define SPECIFIER "cspdiuxX%"
+# define NUL_MSG "(null)"
 
 typedef struct s_lists
 {
@@ -45,14 +47,13 @@ int		ft_print_p(va_list *ap, t_lists *info);
 int		ft_print_c(va_list *ap, t_lists *info);
 int		ft_print_s(va_list *ap, t_lists *info);
 int		ft_print_di(va_list *ap, t_lists *info);
-int		ft_get_length(long long nbr);
-int		ft_putnbr(long long nbr);
+int		ft_get_length(long long nbr, t_lists *info);
+int		ft_putnbr(long long nbr, t_lists *info);
 int		ft_putpadding(char c, int length);
 int		ft_putprefix(long long nbr, t_lists *info);
-int		ft_get_length_ux(unsigned long nbr, t_lists *info);
+int		ft_get_length_uxp(long long nbr, t_lists *info);
 int		ft_put_with_zero(long long nbr, t_lists *info, int nbrlen);
 int		ft_put_with_spaces(long long nbr, t_lists *info, int nbrlen);
-int		ft_putnbr_u(unsigned long nbr, t_lists *info);
-int		ft_putnbr_x(unsigned long nbr, t_lists *info);
+int		ft_putnbr_ux(long long nbr, t_lists *info);
 
 #endif

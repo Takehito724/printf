@@ -6,12 +6,11 @@
 /*   By: tkoami <tkoami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 13:18:41 by tkoami            #+#    #+#             */
-/*   Updated: 2021/01/26 01:39:04 by tkoami           ###   ########.fr       */
+/*   Updated: 2021/01/26 21:23:36 by tkoami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "libft/libft.h"
 
 int		ft_set_nbrs(va_list *ap, char **fmt, t_lists *info, int mode)
 {
@@ -68,10 +67,7 @@ int		ft_process_arg(va_list *ap, char **fmt)
 	(*fmt)++;
 	while (ft_strchr("0-", **fmt))
 	{
-		if (**fmt == '-')
-			info.flag[MINUS] = 1;
-		else
-			info.flag[ZERO] = 1;
+		(**fmt == '-') ? (info.flag[MINUS] = 1) : (info.flag[ZERO] = 1);
 		(*fmt)++;
 	}
 	info.width = ft_set_nbrs(ap, fmt, &info, WIDTH);
