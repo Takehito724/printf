@@ -6,14 +6,16 @@
 /*   By: tkoami <tkoami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 20:09:51 by tkoami            #+#    #+#             */
-/*   Updated: 2021/01/26 10:24:24 by tkoami           ###   ########.fr       */
+/*   Updated: 2021/01/26 12:20:18 by tkoami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "ft_printf.h"
 
-int		ft_putminus(long nbr)
+int		ft_putprefix(long long nbr, t_lists *info)
 {
+	if (*(info->specifier) == 'p')
+		return (write(1, "0x", 2));
 	if (nbr < 0)
 		return (write(1, "-", 1));
 	return (0);
@@ -29,7 +31,7 @@ int		ft_putpadding(char c, int length)
 	return (res);
 }
 
-int		ft_putnbr(long nbr)
+int		ft_putnbr(long long nbr)
 {
 	char	mod;
 	int		res;
@@ -45,7 +47,7 @@ int		ft_putnbr(long nbr)
 		return (res += write(1, &mod, 1));
 }
 
-int		ft_get_length(long nbr)
+int		ft_get_length(long long nbr)
 {
 	int length;
 
@@ -57,47 +59,17 @@ int		ft_get_length(long nbr)
 
 int		ft_print_di(va_list *ap, t_lists *info)
 {
-	long	nbr;
-	int		nbrlen;
-	int		res;
+	long long	nbr;
+	int			nbrlen;
+	int			res;
 
-	nbr = (long)va_arg(*ap, int);
+	nbr = (long long)va_arg(*ap, int);
 	nbrlen = ft_get_length(nbr);
 	if (info->precision == 0 && nbr == 0)
 		return (0);
-	if (nbrlen <= info->precision && info->precision < info->width)
-	{
-		if (info->flag[MINUS])
-			res += ft_putminus(nbr) \
-				+ ft_putpadding('0', info->precision - nbrlen) \
-				+ ft_putnbr(nbr) \
-				+ ft_putpadding(' ', info->width - info->precision);
-		else if (info->flag[ZERO])
-			res += ft_putpadding('0', info->width - nbrlen) \
-				+ ft_putminus(nbr) + ft_putnbr(nbr);
-		else
-			res += ft_putpadding(' ', info->width - info->precision) \
-				+ ft_putminus(nbr) \
-				+ ft_putpadding('0', info->precision - nbrlen) \
-				+ ft_putnbr(nbr);
-	}
-	if (nbrlen <= info->precision && info->width <= info->precision)
-		res += + ft_putminus(nbr) \
-				+ ft_putpadding('0', info->precision - nbrlen) \
-				+ ft_putnbr(nbr);
+	if (nbrlen <= info->precision)
+		res = ft_put_with_zero(nbr, info, nbrlen);
 	if (info->precision < nbrlen && nbrlen < info->width)
-	{
-		if (info->flag[MINUS])
-			res += ft_putminus(nbr) + ft_putnbr(nbr) \
-			+ ft_putpadding(' ', info->width - nbrlen);
-		else if (info->flag[ZERO])
-			res += ft_putpadding('0', info->width - nbrlen) \
-			+ ft_putminus(nbr) + ft_putnbr(nbr);
-		else
-			res += ft_putpadding(' ', info->width - nbrlen)\
-			+ ft_putminus(nbr) + ft_putnbr(nbr);
-	}
-	if (nbrlen > info->precision && info->width <= nbrlen)
-		res += ft_putminus(nbr) + ft_putnbr(nbr);
+		res = ft_put_with_spaces(nbr, info, nbrlen);
 	return (res);
 }

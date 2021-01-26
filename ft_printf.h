@@ -6,7 +6,7 @@
 /*   By: tkoami <tkoami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 00:43:21 by tkoami            #+#    #+#             */
-/*   Updated: 2021/01/26 10:24:12 by tkoami           ###   ########.fr       */
+/*   Updated: 2021/01/26 12:53:06 by tkoami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,13 @@ int		ft_print_p(va_list *ap, t_lists *info);
 int		ft_print_c(va_list *ap, t_lists *info);
 int		ft_print_s(va_list *ap, t_lists *info);
 int		ft_print_di(va_list *ap, t_lists *info);
-int		ft_get_length(long nbr);
-int		ft_putnbr(long nbr);
+int		ft_get_length(long long nbr);
+int		ft_putnbr(long long nbr);
 int		ft_putpadding(char c, int length);
-int		ft_putminus(long nbr);
+int		ft_putprefix(long long nbr, t_lists *info);
 int		ft_get_length_ux(unsigned long nbr, t_lists *info);
+int		ft_put_with_zero(long long nbr, t_lists *info, int nbrlen);
+int		ft_put_with_spaces(long long nbr, t_lists *info, int nbrlen);
 int		ft_putnbr_u(unsigned long nbr, t_lists *info);
 int		ft_putnbr_x(unsigned long nbr, t_lists *info);
 
