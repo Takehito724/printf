@@ -6,7 +6,7 @@
 /*   By: tkoami <tkoami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 13:18:41 by tkoami            #+#    #+#             */
-/*   Updated: 2021/01/25 21:02:32 by tkoami           ###   ########.fr       */
+/*   Updated: 2021/01/26 01:39:04 by tkoami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@
 int		ft_set_nbrs(va_list *ap, char **fmt, t_lists *info, int mode)
 {
 	int		nbr;
+	int		prec_flag;
 
 	nbr = 0;
+	prec_flag = 0;
 	if (**fmt == '*')
 	{
 		nbr = (int)va_arg(*ap, int);
@@ -31,12 +33,17 @@ int		ft_set_nbrs(va_list *ap, char **fmt, t_lists *info, int mode)
 		(*fmt)++;
 		return (nbr);
 	}
+	if (mode == PRECISION && **fmt == '-')
+	{
+		prec_flag++;
+		(*fmt)++;
+	}
 	while('0' <= **fmt && **fmt <= '9')
 	{
 		nbr = nbr * 10 + **fmt - '0';
 		(*fmt)++;
 	}
-	return (nbr);
+	return (prec_flag ? -1 : nbr);
 }
 
 void	ft_init_info(t_lists *info)
@@ -49,7 +56,6 @@ void	ft_init_info(t_lists *info)
 	info->width = -1;
 	info->precision = -1;
 	info->specifier = 0;
-	info->length = -1;
 	return ;
 }
 
@@ -75,6 +81,7 @@ int		ft_process_arg(va_list *ap, char **fmt)
 		info.precision = ft_set_nbrs(ap, fmt, &info, PRECISION);
 	}
 	info.specifier = ft_strchr(SPECIFIER, **fmt);
+	(*fmt)++;
 	res = ft_printarg(ap, &info);
 	return (res);
 }
