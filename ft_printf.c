@@ -6,7 +6,7 @@
 /*   By: tkoami <tkoami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 13:18:41 by tkoami            #+#    #+#             */
-/*   Updated: 2021/01/26 21:23:36 by tkoami           ###   ########.fr       */
+/*   Updated: 2021/01/27 01:19:14 by tkoami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ int		ft_process_arg(va_list *ap, char **fmt)
 		info.precision = ft_set_nbrs(ap, fmt, &info, PRECISION);
 	}
 	info.specifier = ft_strchr(SPECIFIER, **fmt);
+	if (info.specifier == NULL || *(info.specifier) == '\0')
+		return (0);
 	(*fmt)++;
 	res = ft_printarg(ap, &info);
 	return (res);

@@ -6,7 +6,7 @@
 /*   By: tkoami <tkoami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 01:46:07 by tkoami            #+#    #+#             */
-/*   Updated: 2021/01/26 21:04:20 by tkoami           ###   ########.fr       */
+/*   Updated: 2021/01/27 02:20:04 by tkoami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ int		ft_put_with_zero_uxp(long long nbr, t_lists *info, int nbrlen)
 				+ ft_putpadding('0', info->precision - nbrlen) \
 				+ ft_putnbr_ux(nbr, info) \
 				+ ft_putpadding(' ', info->width - info->precision);
-		else if (info->flag[ZERO])
-			res += ft_putpadding('0', info->width - nbrlen) \
-				+ ft_putprefix(nbr, info) + ft_putnbr_ux(nbr, info);
-		else
+		else 
 			res += ft_putpadding(' ', info->width - info->precision) \
 				+ ft_putprefix(nbr, info) \
 				+ ft_putpadding('0', info->precision - nbrlen) \
@@ -51,8 +48,9 @@ int		ft_put_with_spaces_uxp(long long nbr, t_lists *info, int nbrlen)
 			res += ft_putprefix(nbr, info) + ft_putnbr_ux(nbr, info) \
 			+ ft_putpadding(' ', info->width - nbrlen);
 		else if (info->flag[ZERO])
-			res += ft_putpadding('0', info->width - nbrlen) \
-			+ ft_putprefix(nbr, info) + ft_putnbr_ux(nbr, info);
+			res += ft_putprefix(nbr, info) \
+			+ ft_putpadding((info->precision > 0 ? ' ' : '0'), info->width - nbrlen) \
+			+ ft_putnbr_ux(nbr, info);
 		else
 			res += ft_putpadding(' ', info->width - nbrlen)\
 			+ ft_putprefix(nbr, info) + ft_putnbr_ux(nbr, info);
@@ -88,6 +86,31 @@ int		ft_putnbr_ux(long long nbr, t_lists *info)
 		return (res += write(1, &mod, 1));
 }
 
+int		ft_put_null(t_lists *info)
+{
+	int		res;
+
+	res = 0;
+	if (info->flag[MINUS])
+	{
+		res += write(1, "0x", 2);
+		info->width -= 2;
+		if (info->width < 0)
+			info->width = 0;
+		while ((info->width)--)
+			res += write(1, " ", 1);
+	}
+	else
+	{
+		info->width -= 2;
+		if (info->width < 0)
+			info->width = 0;
+		while ((info->width)--)
+			res += write(1, " ", 1);
+		res += write(1, "0x", 2);
+	}
+	return (res);
+}
 int		ft_get_length_uxp(long long nbr, t_lists *info)
 {
 	int length;
@@ -115,7 +138,13 @@ int		ft_print_ux(va_list *ap, t_lists *info)
 		nbr = (long long)va_arg(*ap, unsigned int);
 	nbrlen = ft_get_length_uxp(nbr, info);
 	if (info->precision == 0 && nbr == 0)
-		return (0);
+	{
+		if (*(info->specifier) == 'p')
+			return (res += ft_put_null(info));
+		while ((info->width)--)
+			res += write(1, " ", 1);
+		return (res);
+	}
 	if (nbrlen <= info->precision)
 		res = ft_put_with_zero_uxp(nbr, info, nbrlen);
 	else

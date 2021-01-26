@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print_di.c                                      :+:      :+:    :+:   */
+/*   ft_print_dic.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tkoami <tkoami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 20:09:51 by tkoami            #+#    #+#             */
-/*   Updated: 2021/01/26 20:52:38 by tkoami           ###   ########.fr       */
+/*   Updated: 2021/01/27 02:56:17 by tkoami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ int		ft_putnbr(long long nbr, t_lists *info)
 	res = 0;
 	if (nbr < 0)
 		nbr *= -1;
-	if (*(info->specifier) == 'c')
+	if (*(info->specifier) == 'c' || *(info->specifier) == '%')
 	{
-		mod = (char)nbr;
-		return (write(1, &mod, 1));
+		nbr = (int)nbr;
+		return (res = write(1, &nbr, 1));
 	}
 	mod = nbr % 10 + '0';
 	nbr /= 10;
@@ -57,7 +57,7 @@ int		ft_get_length(long long nbr, t_lists *info)
 	int length;
 
 	length = 1;
-	if (*(info->specifier) == 'c')
+	if (*(info->specifier) == 'c' || *(info->specifier) == '%')
 		return (length);
 	while (nbr /= 10)
 		length++;
@@ -70,10 +70,18 @@ int		ft_print_di(va_list *ap, t_lists *info)
 	int			nbrlen;
 	int			res;
 
-	nbr = (long long)va_arg(*ap, int);
+	res = 0;
+	if (*(info->specifier) != '%')
+		nbr = (long long)va_arg(*ap, int);
+	else
+		nbr = '%';
 	nbrlen = ft_get_length(nbr, info);
 	if (info->precision == 0 && nbr == 0)
-		return (0);
+	{
+		while ((info->width)--)
+			res += write(1, " ", 1);
+		return (res);
+	}
 	if (nbrlen < info->precision)
 		res = ft_put_with_zero(nbr, info, nbrlen);
 	else

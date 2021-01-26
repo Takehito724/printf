@@ -6,7 +6,7 @@
 /*   By: tkoami <tkoami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 20:59:15 by tkoami            #+#    #+#             */
-/*   Updated: 2021/01/26 21:10:38 by tkoami           ###   ########.fr       */
+/*   Updated: 2021/01/27 01:07:51 by tkoami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,6 @@ int		ft_printarg(va_list *ap, t_lists *info)
 	else if (type == 's')
 		res = ft_print_s(ap, info);
 	else if (type == '%')
-		res = write(1, "%%", 1);
+		res = ft_print_di(ap, info);
 	return (res);
 }

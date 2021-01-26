@@ -6,7 +6,7 @@
 /*   By: tkoami <tkoami@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/26 00:43:21 by tkoami            #+#    #+#             */
-/*   Updated: 2021/01/26 21:02:38 by tkoami           ###   ########.fr       */
+/*   Updated: 2021/01/27 02:19:44 by tkoami           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,6 @@ int		ft_get_length_uxp(long long nbr, t_lists *info);
 int		ft_put_with_zero(long long nbr, t_lists *info, int nbrlen);
 int		ft_put_with_spaces(long long nbr, t_lists *info, int nbrlen);
 int		ft_putnbr_ux(long long nbr, t_lists *info);
+int		ft_put_null(t_lists *info);
 
 #endif
